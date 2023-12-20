@@ -81,9 +81,14 @@ const handleEdit = (id) => {
 
   return (
     <>
+
+    
 <div className="container-fluid mt-5 text-center">
       <button className="btn btn-success mb-3" onClick={() => setShowModal(true)}>
         Add New staff details
+      </button>
+      <button className="btn btn-info mb-3 ml-3" onClick={() => alert("Generate API Started..")}>
+        Generate
       </button>
 </div>
     <div className="container mt-5">

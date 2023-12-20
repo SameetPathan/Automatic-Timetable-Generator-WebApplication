@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { register } from "../firebaseConfig";
 import { getDatabase, ref, set, get } from "firebase/database";
+import { BrowserRouter as Router, Routes, Route,Link  } from "react-router-dom";
 
 function Navbar(props) {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -139,11 +140,13 @@ function Navbar(props) {
       >
         <a className="navbar-brand">Automatic Timetable System</a>
         <div className="form-inline">
-        <button
+        <Link to="/timetable"> <button
             className="btn btn-outline-success my-2 my-sm-0 mr-2"
+  
           >
             View current Week Timetable
-          </button>
+          </button></Link>
+    
         {props.loggedStatus ? <>
           
           <button
