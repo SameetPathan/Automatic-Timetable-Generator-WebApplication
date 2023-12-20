@@ -2,7 +2,7 @@ import React from 'react';
 import "./time.css";
 import TimetableData from './timetableData';
 
-const Timetable = () => {
+const Timetable = (props) => {
 
 
     const timeSlots = [
@@ -52,10 +52,9 @@ const Timetable = () => {
 
   return (
     <>
-    {PaymentResponse.loggedStatus ?<><TimetableData timetableData={timetableData} timeSlots={timeSlots} number={1}></TimetableData>
+    {props.loggedStatus ?<><TimetableData timetableData={timetableData} timeSlots={timeSlots} number={1}></TimetableData>
     <TimetableData timetableData={timetableData} timeSlots={timeSlots} number={2}></TimetableData>
     <TimetableData timetableData={timetableData} timeSlots={timeSlots} number={3}></TimetableData></>:<>
-
     <TimetableData timetableData={timetableData} timeSlots={timeSlots} number={1}></TimetableData>
     
     </>}
