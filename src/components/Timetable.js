@@ -18,27 +18,33 @@ const Timetable = () => {
   const timetableData = [
     {
       day: 'Monday',
-      periods: ['Maths', 'Physics', 'Chemistry', 'Lunch', 'Biology', 'History','Break', 'Practical 1']
+      periods: ['Maths', 'Physics', 'Chemistry', 'Lunch', 'Biology', 'History','Break', 'Practical 1'],
+      teacher: ['S. M. Sameet', 'S. M. Aditya', 'S. M. Rutuja', '', 'S. M. Sanika', 'Sohan','', 'S. M. Amin']
     },
     {
       day: 'Tuesday',
-      periods: ['Physics', 'History', 'Maths', 'Lunch', 'Chemistry', 'Biology','Break', 'Practical 1']
+      periods: ['Physics', 'History', 'Maths', 'Lunch', 'Chemistry', 'Biology','Break', 'Practical 1'],
+      teacher: ['S. M. Aditya', 'S. M. Rutuja', 'S. M. Sameet', '', 'S. M. Sanika', 'Sohan','', 'S. M. Amin']
     },
     {
       day: 'Wednesday',
-      periods: ['Chemistry', 'Biology', 'Physics', 'Lunch', 'History', 'Maths','Break', 'Practical 1']
+      periods: ['Chemistry', 'Biology', 'Physics', 'Lunch', 'History', 'Maths','Break', 'Practical 1'],
+      teacher: ['S. M. Aditya', 'S. M. Rutuja', 'Sohan', '', 'S. M. Sanika', 'S. M. Sameet','', 'S. M. Amin']
     },
     {
       day: 'Thursday',
-      periods: ['Biology', 'Maths', 'History', 'Lunch', 'Physics', 'Chemistry','Break', 'Practical 1']
+      periods: ['Biology', 'Maths', 'History', 'Lunch', 'Physics', 'Chemistry','Break', 'Practical 1'],
+      teacher: ['S. M. Aditya', 'S. M. Sameet', 'S. M. Sanika', '', 'S. M. Rutuja', 'Sohan','', 'S. M. Amin']
     },
     {
       day: 'Friday',
-      periods: ['History', 'Chemistry', 'Biology', 'Lunch', 'Maths', 'Physics','Break', 'Practical 1']
+      periods: ['History', 'Chemistry', 'Biology', 'Lunch', 'Maths', 'Physics','Break', 'Practical 1'],
+      teacher: ['S. M. Aditya', 'S. M. Rutuja', 'S. M. Sanika', '', 'S. M. Sameet', 'Sohan','', 'S. M. Amin']
     },
     {
       day: 'Saturday',
-      periods: ['Project', 'Practical 1', 'Practical 2', 'Maths','Chemistry', 'Biology', 'History','Break']
+      periods: ['Project', 'Practical 1', 'Practical 2', 'Maths','Chemistry', 'Biology', 'History','Break'],
+      teacher: ['Guide', 'S. M. Aditya', 'S. M. Sanika', 'S. M. Sameet', 'S. M. Rutuja', 'Sohan','S. M. Amin', '']
     }
 
   ];

@@ -40,6 +40,13 @@ function TimetableData(props) {
                   </td>
                 ))}
               </tr>
+              <tr>
+                {day.teacher.map((teacher, idx) => (
+                  <td key={idx}>
+                    {teacher}
+                  </td>
+                ))}
+              </tr>
             </React.Fragment>
           ))}
         </tbody>
