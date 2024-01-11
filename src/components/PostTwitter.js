@@ -87,14 +87,12 @@ const handleEdit = (id) => {
       <button className="btn btn-success mb-3" onClick={() => setShowModal(true)}>
         Add New staff details
       </button>
-      <button className="btn btn-info mb-3 ml-3" onClick={() => alert("Generate API Started..")}>
-        Generate
-      </button>
+ 
 </div>
     <div className="container mt-5">
     
 
-    <table className="table">
+    <table className="table mb-5">
   <thead>
     <tr>
       <th>Staff Name</th>

@@ -25,6 +25,16 @@ export function register(registerData){
 }
 
 
+export function addcurrenttime(Data1,Data2,Data3){
+  const dbb = getDatabase();
+  set(ref(dbb, "generatedtimetable/"), {
+    "Data1":Data1,
+    "Data2":Data2,
+    "Data3":Data3,
+
+  });
+}
+
 
 
 

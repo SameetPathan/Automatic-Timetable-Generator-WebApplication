@@ -7,7 +7,7 @@ function BackgroundC() {
       <img
       style={{ 
           width: '100%', 
-          height:"600px",
+          height:"730px",
           objectFit: 'cover' 
         }} 
         src="bg2.jpg"

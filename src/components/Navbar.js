@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { register } from "../firebaseConfig";
 import { getDatabase, ref, set, get } from "firebase/database";
 import { BrowserRouter as Router, Routes, Route,Link  } from "react-router-dom";
-
+import Cookies from 'js-cookie';
 function Navbar(props) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +19,7 @@ function Navbar(props) {
   const logout =()=>{
     props.setLoggedStatus(false)
     props.setCurrentAccount("")
+    Cookies.remove('userstatus');
   }
 
   const handlePhoneNumberChange = (event) => {
@@ -78,6 +79,7 @@ function Navbar(props) {
           props.setCurrentAccount(phoneNumber);
           props.setLoggedStatus(true);
           setPhoneNumber("")
+          Cookies.set('userstatus', true); 
           setPassword("")
         }
         else{
@@ -148,6 +150,11 @@ function Navbar(props) {
           </button></Link>
     
         {props.loggedStatus ? <>
+
+          <Link to="/"  className="btn btn-outline-success my-2 my-sm- mr-2">
+        
+            Dashboard
+       </Link>
           
           <button
             className="btn btn-outline-danger my-2 my-sm-0"

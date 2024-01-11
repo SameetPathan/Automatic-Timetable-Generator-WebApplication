@@ -3,13 +3,24 @@ import Footer from "./components/Footer";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar";
 import BackgroundC from "./components/background";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Timetable from "./components/Timetable";
+import Cookies from 'js-cookie';
 
 function App() {
-  const [loggedStatus, setLoggedStatus] = useState(false);
+  const [loggedStatus, setLoggedStatus] = useState(true);
   const [currentAccount, setCurrentAccount] = useState(false);
+
+  useEffect(() => {
+    let cookieValue = Cookies.get('userstatus');
+    if(cookieValue){
+      setLoggedStatus(true)
+    }else{
+      setLoggedStatus(false)
+    }
+   
+  });
 
   return (
     <Router>
