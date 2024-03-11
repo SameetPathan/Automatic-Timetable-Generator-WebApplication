@@ -7,6 +7,8 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Timetable from "./components/Timetable";
 import Cookies from 'js-cookie';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [loggedStatus, setLoggedStatus] = useState(true);
@@ -52,6 +54,7 @@ function App() {
         )}
       </Routes>
       <Footer />
+      <ToastContainer />
     </Router>
   );
 }

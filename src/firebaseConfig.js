@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set } from "firebase/database";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDc7G-sJS8iDMS1Bx47QEOXsIBFfUDqXpU",
   authDomain: "automatic-timetable-gene-7d2ff.firebaseapp.com",
@@ -21,7 +22,7 @@ export function register(registerData){
       "password":registerData.password,
       "confirmPassword":registerData.confirmPassword,
     });
-    alert("Registration Successfull")
+
 }
 
 

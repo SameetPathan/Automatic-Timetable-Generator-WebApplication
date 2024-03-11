@@ -66,13 +66,15 @@ const Timetable = (props) => {
   }
 
   const timeSlots = [
-    { start: "9:30 AM", end: "10:15 AM" },
-    { start: "10:20 AM", end: "11:05 AM" },
-    { start: "11:10 AM", end: "12:00 PM" },
-    { start: "12:00 PM", end: "12:45 PM" },
-    { start: "12:50 PM", end: "1:35 PM" },
-    { start: "1:40 PM", end: "2:00 PM" },
-    { start: "2:00 PM", end: "4:00 PM" },
+    { start: '8:30 AM', end: '9:30 AM' },
+    { start: '9:30 AM', end: '10:30 AM' },
+    { start: '10:30 AM', end: '10:45 PM' },
+    { start: '10:45 PM', end: '11:45 PM' },
+    { start: '11:45 PM', end: '12:45 PM' },
+    { start: '12:45 PM', end: '1:45 PM' },
+    { start: '1:45 PM', end: '2:45 PM' },
+    { start: '2:45 PM', end: '3:45 PM' },
+    { start: '3:45 PM', end: '4:45 PM' }
   ];
 
   const daysOfWeek = [
@@ -111,11 +113,11 @@ const Timetable = (props) => {
     const generatedData = [];
 
     daysOfWeek.forEach((day) => {
-      const periodsBeforeLunch = generateRandomPeriods().slice(0, 3);
+      const periodsBeforeLunch = generateRandomPeriods().slice(0, 2);
       const lunch = ["Lunch"];
-      const periodsAfterLunch = generateRandomPeriods().slice(0, 2);
+      const periodsAfterLunch = generateRandomPeriods().slice(0, 3);
       const breakPeriod = ["Break"];
-      const remainingPeriods = generateRandomPeriods().slice(0, 1);
+      const remainingPeriods = generateRandomPeriods().slice(0, 3);
 
       const daySchedule = [
         ...periodsBeforeLunch,

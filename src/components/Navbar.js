@@ -3,7 +3,15 @@ import { register } from "../firebaseConfig";
 import { getDatabase, ref, set, get } from "firebase/database";
 import { BrowserRouter as Router, Routes, Route,Link  } from "react-router-dom";
 import Cookies from 'js-cookie';
-function Navbar(props) {
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
+function NavbarComponent(props) {
+
+  const [registershow, setregistershow] = useState(false);
+  const [loginshow, setloginshow] = useState(false);
+
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -20,6 +28,7 @@ function Navbar(props) {
     props.setLoggedStatus(false)
     props.setCurrentAccount("")
     Cookies.remove('userstatus');
+    toast.success("Logged out ");
   }
 
   const handlePhoneNumberChange = (event) => {
@@ -71,8 +80,9 @@ function Navbar(props) {
       const userData = userSnapshot.val();
 
       if (!userData) {
-        alert("Login Failed ");
-        props.setCurrentlogged(true);
+        toast.error("Login Failed ");
+        
+        //props.setCurrentlogged(true);
       }
       else{
         if(userData.phoneNumber===phoneNumber && userData.password===password){
@@ -81,10 +91,12 @@ function Navbar(props) {
           setPhoneNumber("")
           Cookies.set('userstatus', true); 
           setPassword("")
+          toast.success("Login success ");
+          setloginshow(false)
         }
         else{
-          alert("Login Failed")
-          props.setLoggedStatus(false);
+          toast.error("Login Failed ");
+          //props.setLoggedStatus(false);
         }
       }
     }
@@ -131,62 +143,65 @@ function Navbar(props) {
         password: "",
         confirmPassword: "",
       });
+      setRegisterErrors({});
+      toast.success('register successful.');
+      setregistershow(false)
     }
   };
 
   return (
     <>
-      <nav
-        className="navbar navbar-dark"
-        style={{ backgroundColor: "#051922" }}
-      >
-        <a className="navbar-brand">Automatic Timetable System</a>
-        <div className="form-inline">
-        <Link to="/timetable"> <button
-            className="btn btn-outline-success my-2 my-sm-0 mr-2"
+    <nav className="navbar navbar-dark" style={{ backgroundColor: "#051922" }}>
+    <a className="navbar-brand">
+      <i className="fas fa-calendar-alt"></i> Automatic Timetable System
+    </a>
+    <div className="form-inline">
+      <Link to="/timetable">
+        <button className="btn btn-outline-success my-2 my-sm-0 mr-2">
+          <i className="fas fa-clock"></i> View current Week Timetable
+        </button>
+      </Link>
   
-          >
-            View current Week Timetable
-          </button></Link>
-    
-        {props.loggedStatus ? <>
-
-          <Link to="/"  className="btn btn-outline-success my-2 my-sm- mr-2">
-        
-            Dashboard
-       </Link>
-          
+      {props.loggedStatus ? (
+        <>
+          <Link to="/" className="btn btn-outline-success my-2 my-sm- mr-2">
+            <i className="fas fa-tachometer-alt"></i> Dashboard
+          </Link>
+  
           <button
             className="btn btn-outline-danger my-2 my-sm-0"
-           onClick={logout}
+            onClick={logout}
           >
-            Logout
+            <i className="fas fa-sign-out-alt"></i> Logout
           </button>
-        </>:
-        <><button
+        </>
+      ) : (
+        <>
+          <button
             className="btn btn-outline-success my-2 my-sm-0"
-            data-toggle="modal"
-            data-target="#exampleModal"
+            onClick={()=>{setloginshow(true)}}
           >
-            Staff Login
+            <i className="fas fa-sign-in-alt"></i> Staff Login
           </button>
           <button
             className="btn btn-outline-success my-2 my-sm-0 ml-2"
-            data-toggle="modal"
-            data-target="#registerModal"
+            onClick={()=>{setregistershow(true)}}
           >
-            Staff Register
-          </button></>}
-          
-        </div>
-      </nav>
-
+            <i className="fas fa-user-plus"></i> Staff Register
+          </button>
+        </>
+      )}
+    </div>
+  </nav>
+  
+        {loginshow?(
       <div
-        className="modal fade"
+        className="modal fade show"
         id="exampleModal"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        style={{paddingRight:"17px",display:"block"}} aria-modal="true" role="dialog"
       >
         <div className="modal-dialog">
           <div className="modal-content">
@@ -197,8 +212,7 @@ function Navbar(props) {
               <button
                 type="button"
                 className="close"
-                data-dismiss="modal"
-                aria-label="Close"
+                onClick={()=>{setloginshow(false)}}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -241,7 +255,7 @@ function Navbar(props) {
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-dismiss="modal"
+                onClick={()=>{setloginshow(false)}}
               >
                 Close
               </button>
@@ -252,14 +266,10 @@ function Navbar(props) {
           </div>
         </div>
       </div>
-
-      <div
-        className="modal fade"
-        id="registerModal"
-        tabIndex="-1"
-        aria-labelledby="registerModalLabel"
-        aria-hidden="true"
-      >
+      ):("")}
+      {registershow? (            
+      <div className="modal fade show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" style={{paddingRight:"17px",display:"block"}} aria-modal="true" role="dialog">
+    
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
@@ -271,6 +281,7 @@ function Navbar(props) {
                 className="close"
                 data-dismiss="modal"
                 aria-label="Close"
+               onClick={()=>{setregistershow(false)}}
               >
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -368,6 +379,7 @@ function Navbar(props) {
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                onClick={()=>{setregistershow(false)}}
               >
                 Close
               </button>
@@ -381,9 +393,9 @@ function Navbar(props) {
             </div>
           </div>
         </div>
-      </div>
+      </div>):("")}
     </>
   );
 }
 
-export default Navbar;
+export default NavbarComponent;
