@@ -51,11 +51,12 @@ function TimetableData(props) {
           </thead>
           <tbody>
             {props.timetableData.map((day, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={index}> 
                 <tr className="table-active">
                   <td colSpan={8}>{day.day}</td>
                 </tr>
                 <tr>
+                <td></td>
                 {day.periods.map((period, idx) => (
                   <td
                     key={idx}
@@ -74,6 +75,7 @@ function TimetableData(props) {
                 ))}
                 </tr>
                 <tr>
+                <td></td>
                   {day.teacher.map((teacher, idx) => (
                     <td key={idx}>{teacher}</td>
                   ))}
