@@ -5,6 +5,27 @@ import TimetableData from "./timetableData";
 import { addcurrenttime } from "../firebaseConfig";
 
 const Timetable = (props) => {
+
+
+  const [beforeLunch, setBeforeLunch] = useState('');
+  const [afterLunch, setAfterLunch] = useState('');
+  const [afterBreak, setAfterBreak] = useState('');
+
+  const currentDate = new Date().toLocaleDateString();
+
+  const handleBeforeLunchChange = (event) => {
+    setBeforeLunch(event.target.value);
+  };
+
+  const handleAfterLunchChange = (event) => {
+    setAfterLunch(event.target.value);
+  };
+
+  const handleAfterBreakChange = (event) => {
+    setAfterBreak(event.target.value);
+  };
+
+
   const [posts, setPosts] = useState([]);
   const [subjects, setsubjects] = useState([]);
   const [teachers, setteachers] = useState([]);
@@ -83,7 +104,7 @@ const Timetable = (props) => {
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday",
+    //"Saturday",
   ];
  
 
@@ -113,11 +134,11 @@ const Timetable = (props) => {
     const generatedData = [];
 
     daysOfWeek.forEach((day) => {
-      const periodsBeforeLunch = generateRandomPeriods().slice(0, 2);
+      const periodsBeforeLunch = generateRandomPeriods().slice(0, beforeLunch);
       const lunch = ["Lunch"];
-      const periodsAfterLunch = generateRandomPeriods().slice(0, 3);
+      const periodsAfterLunch = generateRandomPeriods().slice(0,afterLunch );
       const breakPeriod = ["Break"];
-      const remainingPeriods = generateRandomPeriods().slice(0, 3);
+      const remainingPeriods = generateRandomPeriods().slice(0, afterBreak);
 
       const daySchedule = [
         ...periodsBeforeLunch,
@@ -143,7 +164,39 @@ const Timetable = (props) => {
 
 
   return (
+    <div className="mb-5">
     <>
+    <div className=" container-fluid row mt-3">
+
+    <div className="col">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Before Lunch Lecture"
+        value={beforeLunch}
+        onChange={handleBeforeLunchChange}
+      />
+    </div>
+    <div className="col">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="After Lunch Lecture"
+        value={afterLunch}
+        onChange={handleAfterLunchChange}
+      />
+    </div>
+    <div className="col">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="After Break Lecture"
+        value={afterBreak}
+        onChange={handleAfterBreakChange}
+      />
+    </div>
+  </div>
+    </>
       {props.loggedStatus ? (
         <>
           <div className="container-fluid mt-5 text-center">
@@ -179,7 +232,7 @@ const Timetable = (props) => {
           ></TimetableData>
         </>
       )}
-    </>
+      </div>
   );
 };
 
