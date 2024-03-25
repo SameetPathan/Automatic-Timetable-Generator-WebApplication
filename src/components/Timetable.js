@@ -1,97 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { getDatabase, ref, set, get, remove } from "firebase/database";
-import "./time.css";
-import TimetableData from "./timetableData";
-import { addcurrenttime } from "../firebaseConfig";
+import React, { useState, useEffect } from 'react';
+import { getDatabase, ref, get, push } from "firebase/database";
+import { toast } from 'react-toastify';
 
-const Timetable = (props) => {
-
-
-  const [beforeLunch, setBeforeLunch] = useState('');
-  const [afterLunch, setAfterLunch] = useState('');
-  const [afterBreak, setAfterBreak] = useState('');
-
-  const currentDate = new Date().toLocaleDateString();
-
-  const handleBeforeLunchChange = (event) => {
-    setBeforeLunch(event.target.value);
-  };
-
-  const handleAfterLunchChange = (event) => {
-    setAfterLunch(event.target.value);
-  };
-
-  const handleAfterBreakChange = (event) => {
-    setAfterBreak(event.target.value);
-  };
-
-
-  const [posts, setPosts] = useState([]);
-  const [subjects, setsubjects] = useState([]);
-  const [teachers, setteachers] = useState([]);
-
-  const [data1, setdata1] = useState([]);
-  const [data2, setdata2] = useState([]);
-  const [data3, setdata3] = useState([]);
-
-  const fetchtime = async () => {
-    const db = getDatabase();
-    const userRef = ref(db, "generatedtimetable");
-    const userSnapshot = await get(userRef);
-    const fetchedPosts = userSnapshot.val();
-    if (fetchedPosts) {
-      setdata1(fetchedPosts.Data1)
-      setdata2(fetchedPosts.Data2)
-      setdata3(fetchedPosts.Data3)
-    }
-  };
+function Timetable() {
+  const [activeTeachers, setActiveTeachers] = useState([]);
+  const [numLectures, setNumLectures] = useState(0);
+  const [numPracticals, setNumPracticals] = useState(0);
+  const [timetable, setTimetable] = useState([]);
 
   useEffect(() => {
-    fetchtime()
+    fetchActiveTeachers();
   }, []);
 
-  const fetchPosts = async () => {
+  const fetchActiveTeachers = async () => {
     const db = getDatabase();
-    const userRef = ref(db, "staffdetails");
-    const userSnapshot = await get(userRef);
-    const fetchedPosts = userSnapshot.val();
-    if (fetchedPosts) {
-      const postsArray = Object.keys(fetchedPosts).map((key) => ({
-        id: key,
-        ...fetchedPosts[key],
-      }));
-      setPosts(postsArray);
-      const subjectsSet = new Set();
-      const teachersSet = new Set();
-      postsArray.forEach((entry) => {
-        subjectsSet.add(entry.subject);
-        teachersSet.add(entry.name);
-      });
-
-      const subjects = Array.from(subjectsSet);
-      const teachers = Array.from(teachersSet);
-      setsubjects(subjects);
-      setteachers(teachers);
-      caller()
+    const teachersRef = ref(db, "staffdetails");
+    const teachersSnapshot = await get(teachersRef);
+    const fetchedTeachers = teachersSnapshot.val();
+    if (fetchedTeachers) {
+      const activeTeachersArray = Object.keys(fetchedTeachers)
+        .map((key) => fetchedTeachers[key])
+        .filter((teacher) => teacher.activeStaff);
+      setActiveTeachers(activeTeachersArray);
     }
   };
-
-  const caller=()=>{
-    let data11 = generateTimetable()
-    setdata1(data11)
-    let data22 = generateTimetable()
-    setdata2(data22)
-    let data33 = generateTimetable()
-    setdata3(data33)
-    addcurrenttime(data11,data22,data33)
-  }
 
   const timeSlots = [
     { start: '8:30 AM', end: '9:30 AM' },
     { start: '9:30 AM', end: '10:30 AM' },
-    { start: '10:30 AM', end: '10:45 PM' },
-    { start: '10:45 PM', end: '11:45 PM' },
-    { start: '11:45 PM', end: '12:45 PM' },
+    { start: '10:30 AM', end: '10:45 AM' },
+    { start: '10:45 AM', end: '11:45 AM' },
+    { start: '11:45 AM', end: '12:45 PM' },
     { start: '12:45 PM', end: '1:45 PM' },
     { start: '1:45 PM', end: '2:45 PM' },
     { start: '2:45 PM', end: '3:45 PM' },
@@ -103,137 +42,175 @@ const Timetable = (props) => {
     "Tuesday",
     "Wednesday",
     "Thursday",
-    "Friday",
-    //"Saturday",
+    "Friday"
   ];
- 
 
-  const generateRandomPeriods = () => {
-    const periods = [...subjects];
-    for (let i = periods.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [periods[i], periods[j]] = [periods[j], periods[i]];
+  const handleGenerateTimetable = () => {
+    const totalPeriods = numLectures + numPracticals;
+    if (totalPeriods !== 7) {
+      toast.error("Total periods should be 7. Please adjust the number of lectures and practicals.");
+      return;
     }
-    return periods;
-  };
-
-  const generateRandomTeachers = (periods) => {
-    const assignedTeachers = [];
-    for (let i = 0; i < periods.length; i++) {
-      let teacher = "";
-      if (periods[i] !== "Break" && periods[i] !== "Lunch") {
-        const index = subjects.indexOf(periods[i]);
-        teacher = teachers[index];
-      }
-      assignedTeachers.push(teacher);
-    }
-    return assignedTeachers;
-  };
-
-  const generateTimetable = () => {
-    const generatedData = [];
-
-    daysOfWeek.forEach((day) => {
-      const periodsBeforeLunch = generateRandomPeriods().slice(0, beforeLunch);
-      const lunch = ["Lunch"];
-      const periodsAfterLunch = generateRandomPeriods().slice(0,afterLunch );
-      const breakPeriod = ["Break"];
-      const remainingPeriods = generateRandomPeriods().slice(0, afterBreak);
-
-      const daySchedule = [
-        ...periodsBeforeLunch,
-        ...lunch,
-        ...periodsAfterLunch,
-        ...breakPeriod,
-        ...remainingPeriods,
-      ];
-
-      const teachersList = generateRandomTeachers(daySchedule);
-
-      const timetableEntry = {
-        day,
-        periods: daySchedule,
-        teacher: teachersList,
+  
+    const generatedTimetable = [];
+    daysOfWeek.forEach(day => {
+      const dayTimetable = {
+        day: day,
+        slots: []
       };
-
-      generatedData.push(timetableEntry);
+      let remainingLectures = numLectures;
+      let remainingPracticals = numPracticals;
+  
+      for (let i = 0; i < timeSlots.length; i++) {
+        if (remainingPracticals > 0 && i < timeSlots.length - 2 && i % 2 === 0) {
+          // Add practical session
+          const practicalSlot = {
+            time: {
+              start: timeSlots[i].start,
+              end: timeSlots[i + 2].end
+            },
+            teacher: getRandomTeacher(true),
+            isPractical: true
+          };
+          dayTimetable.slots.push(practicalSlot);
+          remainingPracticals--;
+          i++; // Skip the next slot as it's already occupied by the practical session
+        } else if (remainingLectures > 0) {
+          // Add lecture session
+          const lectureSlot = {
+            time: {
+              start: timeSlots[i].start,
+              end: timeSlots[i].end
+            },
+            teacher: getRandomTeacher(false),
+            isPractical: false
+          };
+          dayTimetable.slots.push(lectureSlot);
+          remainingLectures--;
+        } else {
+          // Add break
+          const breakSlot = {
+            time: {
+              start: timeSlots[i].start,
+              end: timeSlots[i].end
+            },
+            teacher: null,
+            isPractical: false
+          };
+          dayTimetable.slots.push(breakSlot);
+        }
+      }
+      generatedTimetable.push(dayTimetable);
     });
-
-    return generatedData;
+  
+    setTimetable(generatedTimetable);
+  };
+  
+  // Helper function to get a random teacher based on availability and type (lecture or practical)
+  const getRandomTeacher = (isPractical) => {
+    const availableTeachers = activeTeachers.filter(teacher => teacher.isPractical === isPractical);
+    const randomIndex = Math.floor(Math.random() * availableTeachers.length);
+    return availableTeachers[randomIndex];
   };
 
 
   return (
-    <div className="mb-5">
-    <>
-    <div className=" container-fluid row mt-3">
-
-    <div className="col">
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Before Lunch Lecture"
-        value={beforeLunch}
-        onChange={handleBeforeLunchChange}
-      />
-    </div>
-    <div className="col">
-      <input
-        type="text"
-        className="form-control"
-        placeholder="After Lunch Lecture"
-        value={afterLunch}
-        onChange={handleAfterLunchChange}
-      />
-    </div>
-    <div className="col">
-      <input
-        type="text"
-        className="form-control"
-        placeholder="After Break Lecture"
-        value={afterBreak}
-        onChange={handleAfterBreakChange}
-      />
-    </div>
-  </div>
-    </>
-      {props.loggedStatus ? (
-        <>
-          <div className="container-fluid mt-5 text-center">
-            <button
-              className="btn btn-info mb-3 ml-3"
-              onClick={() => fetchPosts()}
-            >
-              Generate
-            </button>
-          </div>
-          <TimetableData
-            timetableData={data1}
-            timeSlots={timeSlots}
-            number={1}
-          ></TimetableData>
-          <TimetableData
-            timetableData={data2}
-            timeSlots={timeSlots}
-            number={2}
-          ></TimetableData>
-          <TimetableData
-            timetableData={data3}
-            timeSlots={timeSlots}
-            number={3}
-          ></TimetableData>
-        </>
-      ) : (
-        <>
-          <TimetableData
-            timetableData={data1}
-            timeSlots={timeSlots}
-            number={1}
-          ></TimetableData>
-        </>
-      )}
+    <div className="container"  style={{marginBottom:"80px"}}>
+      <div className="alert alert-info" role="alert">
+        Active Teachers
       </div>
+
+      <table className="table border shadow">
+        <thead className="thead-dark">
+          <tr>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Subjects</th>
+            <th>Is Practical</th>
+          </tr>
+        </thead>
+        <tbody>
+          {activeTeachers.map((teacher, index) => (
+            <tr key={index}>
+              <td>{teacher.name}</td>
+              <td>{teacher.phone}</td>
+              <td>{teacher.subject}</td>
+              <td>
+                {teacher.isPractical ? (
+                  <i className="fas fa-check-circle text-success"></i> // Yes icon
+                ) : (
+                  <i className="fas fa-times-circle text-danger"></i> // No icon
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-4 shadow border p-3" style={{ marginBottom: "80px" }}>
+        <div className="alert alert-info" role="alert">
+          Generate Timetable
+        </div>
+        <div className="form-group">
+          <label htmlFor="numLectures">Number of Lectures per Day: (6)</label>
+          <input
+            type="number"
+            className="form-control"
+            id="numLectures"
+            value={numLectures}
+            onChange={(e) => setNumLectures(parseInt(e.target.value))}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="numPracticals">Number of Practicals per Day:(1)</label>
+          <input
+            type="number"
+            className="form-control"
+            id="numPracticals"
+            value={numPracticals}
+            onChange={(e) => setNumPracticals(parseInt(e.target.value))}
+          />
+        </div>
+        <button
+          className="btn btn-primary"
+          onClick={handleGenerateTimetable}
+          disabled={numLectures <= 0 || numPracticals <= 0}
+        >
+          Generate Timetable
+        </button>
+      </div>
+
+      {/* Render timetable */}
+      <div>
+        {timetable.map((day, index) => (
+          <div key={index}>
+            <h3>{day.day}</h3>
+            <table className="table border shadow">
+              <thead className="thead-dark">
+                <tr>
+                  <th>Time Slot</th>
+                  <th>Teacher</th>
+                  <th>Subject</th>
+                  <th>Is Practical</th>
+                </tr>
+              </thead>
+              <tbody>
+                {day.slots.map((slot, index) => (
+                  <tr key={index}>
+                    <td>{slot.time.start} - {slot.time.end}</td>
+                    <td>{slot.teacher.name}</td>
+                    <td>{slot.teacher.subject}</td>
+                    <td>{slot.isPractical ? "Yes" : "No"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+
+    </div>
   );
-};
+}
 
 export default Timetable;

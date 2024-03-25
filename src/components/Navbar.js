@@ -153,12 +153,12 @@ function NavbarComponent(props) {
     <>
     <nav className="navbar navbar-dark" style={{ backgroundColor: "#051922" }}>
     <a className="navbar-brand">
-      <i className="fas fa-calendar-alt"></i> Automatic Timetable System
+      <img src="logo34.png" className="" height={35}/> Automatic Timetable System
     </a>
     <div className="form-inline">
       <Link to="/timetable">
         <button className="btn btn-outline-success my-2 my-sm-0 mr-2">
-          <i className="fas fa-clock"></i> View current Week Timetable
+          <i className="fas fa-clock"></i> Generate Timetable
         </button>
       </Link>
   
