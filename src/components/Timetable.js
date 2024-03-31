@@ -109,12 +109,11 @@ function Timetable() {
   };
   
   // Helper function to get a random teacher based on availability and type (lecture or practical)
-  const getRandomTeacher = (isPractical) => {
-    const availableTeachers = activeTeachers.filter(teacher => teacher.isPractical === isPractical);
-    const randomIndex = Math.floor(Math.random() * availableTeachers.length);
-    return availableTeachers[randomIndex];
-  };
-
+  // const getRandomTeacher = (isPractical) => {
+  //   const availableTeachers = activeTeachers.filter(teacher => teacher.isPractical === isPractical);
+  //   const randomIndex = Math.floor(Math.random() * availableTeachers.length);
+  //   return availableTeachers[randomIndex];
+  // };
 
   if (!timeSlots || timeSlots.length === 0) {
     return <div>No time slots available</div>;
@@ -124,15 +123,20 @@ function Timetable() {
   const teaBreakSlot = 3; // 3rd slot
   const lunchBreakSlot = 7; // 7th slot
 
+  // Function to get a random teacher
+  const getRandomTeacher = () => {
+    const randomIndex = Math.floor(Math.random() * activeTeachers.length);
+    return activeTeachers[randomIndex];
+  };
+
   // Function to get the teacher for a specific day and slot
   const getTeacherForSlot = (dayIndex, slotIndex) => {
     // For tea break and lunch break slots, return the appropriate break text
     if (slotIndex === teaBreakSlot) return "Tea Break";
     if (slotIndex === lunchBreakSlot) return "Lunch Break";
 
-    // Find the appropriate teacher for the slot
-    const teachersForDay = activeTeachers.filter(teacher => !teacher.isPractical || teacher.isPractical && teacher.subject.includes(`L-${slotIndex}`));
-    return teachersForDay[dayIndex % teachersForDay.length] || {};
+    // Get a random teacher
+    return getRandomTeacher();
   };
 
 
@@ -202,44 +206,73 @@ function Timetable() {
         </button>
       </div>
 
+<div className='border shadow p-1'>
 
-
-    <div>
-    <table className="table border shadow">
-      <thead className="thead-dark">
-        <tr>
-          <th>Time Slot</th>
-          {daysOfWeek.map((day) => (
-            <th key={day}>{day}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {timeSlots.map((slot, slotIndex) => (
-          <tr key={slot.start}>
-            <td>{slot.start} - {slot.end}</td>
-            {daysOfWeek.map((day, dayIndex) => {
-              const teacher = getTeacherForSlot(dayIndex, slotIndex + 1);
-              return (
-                <td key={`${day}-${slotIndex}`}>
-                  {teacher.name ? (
-                    <>
-                      {teacher.name}
-                      <br />
-                      {teacher.subject}
-                      <br />
-                      {teacher.isPractical && "Practical"}
-                    </>
-                  ):(slotIndex===2?<span className="p-2" style={{backgroundColor:"yellow"}}>Tea Break</span>:<span className="p-2" style={{backgroundColor:"green"}}>Lunch Break</span>)}
-                </td>
-              );
-            })}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+      <div style={{ display: "flex", alignItems: "center" }}>
+      
+      <div>
+        <img src="rr.png" alt="Logo" />
+      </div>
     
+      {/* Center (text) */}
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <h4>Sinhgad Institute of Technology Lonavala</h4>
+        <h4>Department of Computer Engineering</h4>
+      </div>
+    
+      {/* Right side (current date) */}
+      <div>
+        W.e.f. Date: <p>{new Date().toLocaleDateString()}</p>
+      </div>
+    </div>
+
+      <div>
+      <table className="table border shadow table-bordered">
+        <thead className="thead border">
+          <tr style={{backgroundColor:"rgb(98 172 234)"}}>
+            <th >Time/Day</th>
+            {daysOfWeek.map((day) => (
+              <th key={day}>{day}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {timeSlots.map((slot, slotIndex) => (
+            <tr key={slot.start}>
+              <td style={{backgroundColor:"rgb(98 172 234)"}} >{slot.start} - {slot.end}</td>
+              {daysOfWeek.map((day, dayIndex) => {
+                const teacher = getTeacherForSlot(dayIndex, slotIndex + 1);
+                return (
+                  <td key={`${day}-${slotIndex}`} style={slotIndex === 2 || slotIndex === 6 ? { backgroundColor: "rgb(98 172 234)" } : null}>
+                    {teacher && teacher.name ? (
+                      <>
+                        {teacher.name}
+                        <br />
+                        {teacher.subject}
+                        <br />
+                        {teacher.isPractical && "Practical"}
+                      </>
+                    ) : (
+                      slotIndex === 2 ? (
+                        <span className="p-2" style={{backgroundColor:"rgb(98 172 234)"}}>
+                          Tea Break
+                        </span>
+                      ) : (
+                        <span className="p-2" style={{backgroundColor:"rgb(98 172 234)"}}>
+                          Lunch Break
+                        </span>
+                      )
+                    )}
+                  </td>
+                );
+                
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    </div>
 
 
     </div>
