@@ -27,6 +27,15 @@ function Timetable() {
    
   };
 
+  
+  const handlePrint = (data) => {
+    const printContent = document.getElementById(data);
+    const originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent.innerHTML;
+    window.print();
+    document.body.innerHTML = originalContent;
+  };
+
   const timeSlots = [
     { start: '8:30 AM', end: '9:30 AM' },
     { start: '9:30 AM', end: '10:30 AM' },
@@ -136,6 +145,7 @@ function Timetable() {
     if (slotIndex === lunchBreakSlot) return "Lunch Break";
 
     // Get a random teacher
+
     return getRandomTeacher();
   };
 
@@ -206,13 +216,179 @@ function Timetable() {
         </button>
       </div>
 
-<div className='border shadow p-1'>
+<div className='border shadow p-1' id ="print1">
 
       <div style={{ display: "flex", alignItems: "center" }}>
       
       <div>
         <img src="rr.png" alt="Logo" />
       </div>
+
+      <div class="alert alert-primary" role="alert">
+      Timetable 1
+      <button type="button" className="btn btn-primary ml-2" onClick={() => handlePrint("print1")}>
+      Print
+    </button>
+    </div>
+    
+      {/* Center (text) */}
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <h4>Sinhgad Institute of Technology Lonavala</h4>
+        <h4>Department of Computer Engineering</h4>
+      </div>
+    
+      {/* Right side (current date) */}
+      <div>
+        W.e.f. Date: <p>{new Date().toLocaleDateString()}</p>
+      </div>
+    </div>
+
+      <div>
+      <table className="table border shadow table-bordered">
+        <thead className="thead border">
+          <tr style={{backgroundColor:"rgb(98 172 234)"}}>
+            <th >Time/Day</th>
+            {daysOfWeek.map((day) => (
+              <th key={day}>{day}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {timeSlots.map((slot, slotIndex) => (
+            <tr key={slot.start}>
+              <td style={{backgroundColor:"rgb(98 172 234)"}} >{slot.start} - {slot.end}</td>
+              {daysOfWeek.map((day, dayIndex) => {
+                const teacher = getTeacherForSlot(dayIndex, slotIndex + 1);
+                return (
+                  <td key={`${day}-${slotIndex}`} style={slotIndex === 2 || slotIndex === 6 ? { backgroundColor: "rgb(98 172 234)" } : null}>
+                    {teacher && teacher.name ? (
+                      <>
+                        {teacher.name}
+                        <br />
+                        {teacher.subject}
+                        <br />
+                        {teacher.isPractical && "Practical"}
+                      </>
+                    ) : (
+                      slotIndex === 2 ? (
+                        <span className="p-2" style={{backgroundColor:"rgb(98 172 234)"}}>
+                          Tea Break
+                        </span>
+                      ) : (
+                        <span className="p-2" style={{backgroundColor:"rgb(98 172 234)"}}>
+                          Lunch Break
+                        </span>
+                      )
+                    )}
+                  </td>
+                );
+                
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    </div>
+
+
+    <hr></hr>
+
+
+    <div className='border shadow p-1' id="print2">
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+      
+      <div>
+        <img src="rr.png" alt="Logo" />
+      </div>
+    
+      {/* Center (text) */}
+
+      <div class="alert alert-primary" role="alert">
+  Timetable 2
+  <button type="button" className="btn btn-primary ml-2" onClick={() => handlePrint("print2")}>
+  Print
+</button>
+</div>
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <h4>Sinhgad Institute of Technology Lonavala</h4>
+        <h4>Department of Computer Engineering</h4>
+      </div>
+    
+      {/* Right side (current date) */}
+      <div>
+        W.e.f. Date: <p>{new Date().toLocaleDateString()}</p>
+      </div>
+    </div>
+
+      <div>
+      <table className="table border shadow table-bordered">
+        <thead className="thead border">
+          <tr style={{backgroundColor:"rgb(98 172 234)"}}>
+            <th >Time/Day</th>
+            {daysOfWeek.map((day) => (
+              <th key={day}>{day}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {timeSlots.map((slot, slotIndex) => (
+            <tr key={slot.start}>
+              <td style={{backgroundColor:"rgb(98 172 234)"}} >{slot.start} - {slot.end}</td>
+              {daysOfWeek.map((day, dayIndex) => {
+                const teacher = getTeacherForSlot(dayIndex, slotIndex + 1);
+                return (
+                  <td key={`${day}-${slotIndex}`} style={slotIndex === 2 || slotIndex === 6 ? { backgroundColor: "rgb(98 172 234)" } : null}>
+                    {teacher && teacher.name ? (
+                      <>
+                        {teacher.name}
+                        <br />
+                        {teacher.subject}
+                        <br />
+                        {teacher.isPractical && "Practical"}
+                      </>
+                    ) : (
+                      slotIndex === 2 ? (
+                        <span className="p-2" style={{backgroundColor:"rgb(98 172 234)"}}>
+                          Tea Break
+                        </span>
+                      ) : (
+                        <span className="p-2" style={{backgroundColor:"rgb(98 172 234)"}}>
+                          Lunch Break
+                        </span>
+                      )
+                    )}
+                  </td>
+                );
+                
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    </div>
+
+
+
+    <hr></hr>
+   
+
+    <div className='border shadow p-1' id="print3">
+
+      <div style={{ display: "flex", alignItems: "center" }}>
+      
+      <div>
+        <img src="rr.png" alt="Logo" />
+      </div>
+
+      <div class="alert alert-primary" role="alert">
+      Timetable 3
+      <button type="button" className="btn btn-primary ml-2" onClick={() => handlePrint("print3")}>
+              Print
+            </button>
+    </div>
     
       {/* Center (text) */}
       <div style={{ flex: 1, textAlign: "center" }}>
