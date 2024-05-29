@@ -38,7 +38,7 @@ function App() {
            <Route
             exact
             path="/timetable"
-            element={<Timetable loggedStatus={loggedStatus}></Timetable>}
+            element={<Timetable isuser={true} loggedStatus={loggedStatus}></Timetable>}
           />
           </>
         ) : (
@@ -46,7 +46,7 @@ function App() {
           <Route
             exact
             path="/timetable"
-            element={<Timetable></Timetable>}
+            element={<Timetable isuser={false}></Timetable>}
           />
             <Route exact path="/" element={<BackgroundC />} />
             <Route path="*" element={<BackgroundC />} />

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, get, push } from "firebase/database";
 import { toast } from 'react-toastify';
 
-function Timetable() {
+function Timetable(props) {
   const [activeTeachers, setActiveTeachers] = useState([]);
+  const [activeTeachersPract, setActiveTeachersPract] = useState([]);
+  const [activeTeacherdata, setActiveTeacher] = useState([]);
   const [numLectures, setNumLectures] = useState(0);
   const [numPracticals, setNumPracticals] = useState(0);
   const [timetable, setTimetable] = useState([]);
@@ -20,9 +22,28 @@ function Timetable() {
     if (fetchedTeachers) {
       const activeTeachersArray = Object.keys(fetchedTeachers)
         .map((key) => fetchedTeachers[key])
-        .filter((teacher) => teacher.activeStaff);
+        .filter((teacher) => teacher.activeStaff)
+        .filter((teacher) => !teacher.isPractical);
       setActiveTeachers(activeTeachersArray);
       console.log("## activeTeachersArray:",activeTeachersArray)
+    }
+
+    if (fetchedTeachers) {
+      const activeTeachersArrayPract = Object.keys(fetchedTeachers)
+        .map((key) => fetchedTeachers[key])
+        .filter((teacher) => teacher.activeStaff)
+        .filter((teacher) => teacher.isPractical);
+        setActiveTeachersPract(activeTeachersArrayPract);
+      console.log("## activeTeachersArrayPract:",activeTeachersArrayPract)
+    }
+
+    
+    if (fetchedTeachers) {
+      const activeTeachersArrayPract = Object.keys(fetchedTeachers)
+        .map((key) => fetchedTeachers[key])
+        .filter((teacher) => teacher.activeStaff)
+        setActiveTeacher(activeTeachersArrayPract);
+      console.log("## activeTeachersArrayPract:",activeTeachersArrayPract)
     }
    
   };
@@ -132,6 +153,12 @@ function Timetable() {
   const teaBreakSlot = 3; // 3rd slot
   const lunchBreakSlot = 7; // 7th slot
 
+  const getRandomTeacherPract = () => {
+    const randomIndex = Math.floor(Math.random() * activeTeachersPract.length);
+    return activeTeachersPract[randomIndex];
+  };
+
+
   // Function to get a random teacher
   const getRandomTeacher = () => {
     const randomIndex = Math.floor(Math.random() * activeTeachers.length);
@@ -143,7 +170,8 @@ function Timetable() {
     // For tea break and lunch break slots, return the appropriate break text
     if (slotIndex === teaBreakSlot) return "Tea Break";
     if (slotIndex === lunchBreakSlot) return "Lunch Break";
-
+    if (slotIndex === 8) return getRandomTeacherPract();
+    if (slotIndex === 9) return getRandomTeacherPract();
     // Get a random teacher
 
     return getRandomTeacher();
@@ -152,6 +180,8 @@ function Timetable() {
 
   return (
     <div className="container"  style={{marginBottom:"80px"}}>
+
+    {props.isuser &&(<>
       <div className="alert alert-info" role="alert">
         Active Teachers
       </div>
@@ -166,7 +196,7 @@ function Timetable() {
           </tr>
         </thead>
         <tbody>
-          {activeTeachers.map((teacher, index) => (
+          {activeTeacherdata.map((teacher, index) => (
             <tr key={index}>
               <td>{teacher.name}</td>
               <td>{teacher.phone}</td>
@@ -215,8 +245,9 @@ function Timetable() {
           Generate Timetable
         </button>
       </div>
+  </>)}
 
-<div className='border shadow p-1' id ="print1">
+<div className='border shadow p-1 mt-5' id ="print1">
 
       <div style={{ display: "flex", alignItems: "center" }}>
       
@@ -261,7 +292,8 @@ function Timetable() {
                 const teacher = getTeacherForSlot(dayIndex, slotIndex + 1);
                 return (
                   <td key={`${day}-${slotIndex}`} style={slotIndex === 2 || slotIndex === 6 ? { backgroundColor: "rgb(98 172 234)" } : null}>
-                    {teacher && teacher.name ? (
+                   
+                  {teacher && teacher.name ? (
                       <>
                         {teacher.name}
                         <br />

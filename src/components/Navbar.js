@@ -158,12 +158,19 @@ function NavbarComponent(props) {
     <div className="form-inline">
       <Link to="/timetable">
         <button className="btn btn-outline-success my-2 my-sm-0 mr-2">
-          <i className="fas fa-clock"></i> Generate Timetable
+          <i className="fas fa-clock"></i> Timetable
         </button>
       </Link>
   
       {props.loggedStatus ? (
         <>
+
+        <Link to="/timetable">
+        <button className="btn btn-outline-success my-2 my-sm-0 mr-2">
+          <i className="fas fa-clock"></i> Generate Timetable
+        </button>
+      </Link>
+
           <Link to="/" className="btn btn-outline-success my-2 my-sm- mr-2">
             <i className="fas fa-tachometer-alt"></i> Dashboard
           </Link>
