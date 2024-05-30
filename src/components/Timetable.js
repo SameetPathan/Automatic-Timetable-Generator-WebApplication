@@ -65,8 +65,7 @@ function Timetable(props) {
     { start: '11:45 AM', end: '12:45 PM' },
     { start: '12:45 PM', end: '1:45 PM' },
     { start: '1:45 PM', end: '2:45 PM' },
-    { start: '2:45 PM', end: '3:45 PM' },
-    { start: '3:45 PM', end: '4:45 PM' }
+    { start: '2:45 PM', end: '4:45 PM (2 hr)' },
   ];
 
   const daysOfWeek = [
