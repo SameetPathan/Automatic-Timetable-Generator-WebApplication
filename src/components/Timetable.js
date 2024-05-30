@@ -164,14 +164,17 @@ function Timetable(props) {
     const randomIndex = Math.floor(Math.random() * activeTeachers.length);
     return activeTeachers[randomIndex];
   };
-
+  let practTeacher;
   // Function to get the teacher for a specific day and slot
   const getTeacherForSlot = (dayIndex, slotIndex) => {
     // For tea break and lunch break slots, return the appropriate break text
     if (slotIndex === teaBreakSlot) return "Tea Break";
     if (slotIndex === lunchBreakSlot) return "Lunch Break";
-    if (slotIndex === 8) return getRandomTeacherPract();
-    if (slotIndex === 9) return getRandomTeacherPract();
+    if (slotIndex === 8) {
+      practTeacher = getRandomTeacherPract();
+    return practTeacher;
+    }
+    if (slotIndex === 9) return practTeacher;
     // Get a random teacher
 
     return getRandomTeacher();
